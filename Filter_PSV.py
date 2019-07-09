@@ -1,12 +1,13 @@
-import glob
 from datetime import datetime
 import numpy as np
 import os
+import re
+from pathlib import Path
 
 
-path_to_file = '/Users/mistral/Downloads/2018_06/'
-move_to = '/Users/mistral/Downloads/unused_psv/' #directory by this name must exist in path
-files = glob.glob(path_to_file+'*.psv')
+path_to_file = Path('/Users/mistral/Downloads/2018_06/')
+move_to = Path('/Users/mistral/Downloads/unused_psv/') #directory by this name must exist in path
+files = os.listdir(path_to_file)
 
 starttime = datetime.strptime('08:00','%H:%M').time()
 endtime = datetime.strptime('17:00','%H:%M').time()
@@ -19,4 +20,4 @@ psv_times = np.column_stack((times, files))
 ignore_psv = [row for row in psv_times if (row[0]>starttime and row[0]<endtime)]
 
 for row in ignore_psv:
-    os.rename(path_to_file + row[1], move_to + row[1])
+    os.rename(os.path.join(path_to_file, row[1]), os.path.join(move_to, row[1]))
